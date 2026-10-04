@@ -1,0 +1,64 @@
+
+# ==============================
+# Virtual Environments
+# ==============================
+.venv/
+venv/
+env/
+
+# ==============================
+# Environment Variables & Secrets
+# ==============================
+.env
+.env.*
+!.env.example
+
+# Google OAuth Credentials
+credentials.json
+token.json
+client_secret*.json
+
+# ==============================
+# Python Cache
+# ==============================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ==============================
+# Testing & Coverage
+# ==============================
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# ==============================
+# IDE & Editor
+# ==============================
+.vscode/
+.idea/
+
+# ==============================
+# Logs
+# ==============================
+*.log
+logs/
+
+# ==============================
+# Invoice Files
+# ==============================
+sample_invoices/*
+!sample_invoices/.gitkeep
+
+uploads/
+outputs/
+reports/
+
+# ==============================
+# Operating System
+# ==============================
+.DS_Store
+Thumbs.db
+desktop.ini
