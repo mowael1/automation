@@ -1,74 +1,54 @@
-from datetime import date
-from decimal import Decimal
-
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict
 
 
 class InvoiceItem(BaseModel):
-    description: str = Field(
-        description="Description or name of the invoice item"
-    )
+    model_config = ConfigDict(extra="forbid")
 
-    quantity: Decimal = Field(
-        description="Quantity of the item"
-    )
+    description: str
+    quantity: float | None
+    unit_price: float | None
+    amount: float | None
 
-    unit_price: Decimal = Field(
-        description="Price per unit"
-    )
 
-    amount: Decimal = Field(
-        description="Total amount for this line item"
-    )
+class InvoiceAdjustment(BaseModel):
+    model_config = ConfigDict(extra="forbid")
 
+    label: str
+    amount: float
 
 class InvoiceData(BaseModel):
-    invoice_number: str = Field(
-        description="Invoice number or invoice identifier"
-    )
+    model_config = ConfigDict(extra="forbid")
 
-    invoice_date: date = Field(
-        description="Invoice issue date"
-    )
+    invoice_number: str
+    invoice_date: str
+    due_date: str | None
 
-    due_date: date | None = Field(
-        default=None,
-        description="Invoice due date if available"
-    )
+    supplier_name: str
+    customer_name: str | None
 
-    supplier_name: str = Field(
-        description="Name of the company or person issuing the invoice"
-    )
+    currency: str
 
-    customer_name: str | None = Field(
-        default=None,
-        description="Name of the customer receiving the invoice"
-    )
+    items: list[InvoiceItem]
 
-    currency: str = Field(
-        description="Invoice currency such as EGP, USD, EUR"
-    )
+    subtotal: float | None
+    tax_amount: float | None
+    total_amount: float
 
-    items: list[InvoiceItem] = Field(
-        default_factory=list,
-        description="List of invoice line items"
-    )
+    payment_status: str | None
+    
+    adjustments: list[InvoiceAdjustment]
+    
+class InvoiceValidationResult(BaseModel):
+    is_valid: bool
+    errors: list[str]
+    warnings: list[str]
+    
 
-    subtotal: Decimal | None = Field(
-        default=None,
-        description="Subtotal before taxes"
-    )
+class InvoiceProcessingResult(BaseModel):
+    ocr_used: bool
+    ocr_pages: list[int]
 
-    tax_amount: Decimal | None = Field(
-        default=None,
-        description="Total tax amount"
-    )
+    extracted_text: str
 
-    total_amount: Decimal = Field(
-        description="Final invoice total"
-    )
-
-    payment_status: str | None = Field(
-        default=None,
-        description="Payment status if available"
-    )
+    invoice: InvoiceData
+    validation: InvoiceValidationResult
